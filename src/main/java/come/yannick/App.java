@@ -13,11 +13,13 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) {
-        Scene scene = new Scene(new StackPane(), 640, 480);
+        MainView mainView = new MainView();
+        Scene scene = new Scene(mainView, 640, 480);
         stage.setScene(scene);
         stage.setTitle("Game of life | :)");
 
         stage.show();
+        mainView.draw();
     }
 
     public static void main(String[] args) {
