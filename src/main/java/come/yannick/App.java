@@ -15,11 +15,23 @@ public class App extends Application {
     public void start(Stage stage) {
         Scene scene = new Scene(new StackPane(), 640, 480);
         stage.setScene(scene);
+        stage.setTitle("Game of life | :)");
+
         stage.show();
     }
 
     public static void main(String[] args) {
-        launch();
+        launch(args);
+        Simulation simulation = new Simulation(8, 5);
+        simulation.setAlive(2,2);
+        simulation.setAlive(3,2);
+        simulation.setAlive(4,2);
+        simulation.printBoard();
+        simulation.step();
+        simulation.printBoard();
+        simulation.step();
+        simulation.printBoard();
+
     }
 
 }
