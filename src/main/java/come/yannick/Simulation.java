@@ -14,13 +14,13 @@ public class Simulation {
     public void printBoard() {
         System.out.println("---");
         for (int y = 0; y < height; y++) {
-            String line = "|";
+            String line = "| Y: " + y;
             for (int x = 0; x < width; x++) {
                 if(this.board[x][y] == 0) {
                     // 0 == death
-                    line += "." + x + y;
+                    line += ".";
                 } else {
-                    line += "*" + x + y;
+                    line += "*";
                 }
             }
             line += "|";
@@ -30,11 +30,22 @@ public class Simulation {
     }
 
     public void setAlive(int x, int y) {
-        this.board[x][y] = 1;
+        setState(x, y, 1);
     }
 
     public void setDead(int x, int y) {
-        this.board[x][y] = 0;
+        setState(x, y, 0);
+    }
+
+    public void setState(int x, int y, int state) {
+        if (x < 0 || x >= width) {
+            return;
+        }
+        if (y < 0 || y >= height){
+            return;
+        }
+
+        board[x][y] = state;
     }
 
     public int countAliveNeighbours(int x, int y) {
@@ -89,5 +100,6 @@ public class Simulation {
 
     public int getWidth() { return this.width; }
     public int getHeight() { return this.height; }
+    public int[][] getBoard() { return this.board; }
 
 }

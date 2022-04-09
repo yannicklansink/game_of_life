@@ -24,7 +24,7 @@ public class App extends Application {
 
     public static void main(String[] args) {
         launch(args);
-        Simulation simulation = new Simulation(8, 5);
+        Simulation simulation = new Simulation(8, 8);
         simulation.setAlive(2,2);
         simulation.setAlive(3,2);
         simulation.setAlive(4,2);

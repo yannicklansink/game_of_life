@@ -1,19 +1,24 @@
 package come.yannick;
 
+import javafx.geometry.Point2D;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.transform.Affine;
+import javafx.scene.transform.NonInvertibleTransformException;
 
 public class MainView extends VBox {
 
     private Button stepButton;
     private Canvas canvas;
     private Affine affine;
-
     private Simulation simulation;
+    private int drawMode = 1; // 0 == draw death sells || 1 == draw life sells
 
     public MainView() {
         stepButton = new Button("step");
@@ -22,16 +27,43 @@ public class MainView extends VBox {
             draw();
         });
         canvas = new Canvas(400, 400);
+        canvas.setOnMousePressed(this::handleDraw);
+        canvas.setOnMouseDragged(this::handleDraw);
+
+        this.setOnKeyPressed(this::onKeyPressed);
 
         affine = new Affine();
         affine.appendScale(400/10f, 400/10f);
 
 
         simulation = new Simulation(10, 10);
-        simulation.setAlive(2,2);
-        simulation.setAlive(3,2);
-        simulation.setAlive(4,2);
         this.getChildren().addAll(stepButton, canvas);
+    }
+
+    private void onKeyPressed(KeyEvent keyEvent) {
+        if(keyEvent.getCode() == KeyCode.D) {
+            drawMode = 1;
+            System.out.println("Draw mode");
+        } else if(keyEvent.getCode() == KeyCode.E) {
+            drawMode = 0;
+            System.out.println("Erase mode");
+        }
+    }
+
+    private void handleDraw(MouseEvent event) {
+        double mouseX = event.getX();
+        double mouseY = event.getY();
+
+        try {
+            Point2D simCoord = affine.inverseTransform(mouseX, mouseY);
+            int simX = (int) simCoord.getX();
+            int simY = (int) simCoord.getY();
+            simulation.setState(simX, simY, drawMode);
+            draw();
+        } catch (NonInvertibleTransformException e) {
+            System.out.println("Could not invert transform");
+        }
+
     }
 
     public void draw() {
